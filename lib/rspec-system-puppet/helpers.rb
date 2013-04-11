@@ -19,7 +19,7 @@ module RSpecSystemPuppet::Helpers
     # Grab PL repository and install PL copy of puppet
     log.info "Starting installation of puppet from PL repos"
     if facts['osfamily'] == 'RedHat'
-      if facts['operatinsystem'] == 'Fedora'
+      if facts['operatingsystem'] == 'Fedora'
         # Fedora testing is probably the best for now
         system_run('sed -i "0,/RE/s/enabled=0/enabled=1/" /etc/yum.repos.d/fedora-updates-testing.repo')
       else
