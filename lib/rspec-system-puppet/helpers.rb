@@ -5,7 +5,7 @@ module RSpecSystemPuppet::Helpers
   include RSpecSystem::Log
 
   # Basic helper to install puppet
-  def system_puppet_install(options = {})
+  def puppet_install(options = {})
     # Grab facts from node
     facts = system_node.facts
 
@@ -34,7 +34,7 @@ module RSpecSystemPuppet::Helpers
   end
 
   # Helper to copy a module onto a node from source
-  def system_puppet_module_from_path(options)
+  def puppet_module_install(options)
     # Defaults etc.
     options = {
       :node => rspec_system_node_set.default_node,
@@ -50,5 +50,31 @@ module RSpecSystemPuppet::Helpers
 
     log.info("Now transferring module onto node")
     system_rcp(:sp => source, :d => node, :dp => File.join(module_path, module_name))
+  end
+
+  # Runs puppet resource commands
+  def puppet_resource(opts)
+    if opts.is_a?(String)
+      opts = {:resource => opts}
+    end
+
+    # Defaults
+    opts = {
+      :node => rspec_system_node_set.default_node
+    }.merge(opts)
+
+    resource = opts[:resource]
+    node = opts[:node]
+
+    raise 'Must provide resource' unless resource
+
+    log.info("Now running puppet resource")
+    result = system_run(:n => node, :c => "puppet resource #{resource}")
+
+    if block_given?
+      yield(*result)
+    else
+      result
+    end
   end
 end
