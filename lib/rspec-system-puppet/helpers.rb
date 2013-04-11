@@ -19,7 +19,11 @@ module RSpecSystemPuppet::Helpers
     # Grab PL repository and install PL copy of puppet
     log.info "Starting installation of puppet from PL repos"
     if facts['osfamily'] == 'RedHat'
-      system_run('rpm -ivh http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm')
+      if facts['operatingsystemrelease'] =~ /^6\./
+        system_run('rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-6.noarch.rpm')
+      else
+        system_run('rpm -ivh http://yum.puppetlabs.com/el/5/products/x86_64/puppetlabs-release-5-6.noarch.rpm')
+      end
       system_run('yum install -y puppet')
     elsif facts['osfamily'] == 'Debian'
       system_run("wget http://apt.puppetlabs.com/puppetlabs-release-#{facts['lsbdistcodename']}.deb")
