@@ -6,9 +6,9 @@ describe "basic tests:" do
   end
 
   it 'check puppet_resource returns an exit code of 0' do
-    puppet_resource('user') do |s,o,e|
-      s.exitstatus.should == 0
-      e.should == ''
+    puppet_resource('user') do |r|
+      r[:exit_code].should == 0
+      r[:stderr].should == ''
     end
   end
 end

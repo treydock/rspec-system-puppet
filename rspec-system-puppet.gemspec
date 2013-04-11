@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
 
   # Dependencies
   s.required_ruby_version = '>= 1.8.7'
-  s.add_runtime_dependency "rspec-system", '~> 0.2.0'
+  s.add_runtime_dependency "rspec-system", '~> 0.3.0'
 end

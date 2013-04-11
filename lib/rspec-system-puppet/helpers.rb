@@ -81,7 +81,7 @@ module RSpecSystemPuppet::Helpers
     result = system_run(:n => node, :c => "puppet resource #{resource}")
 
     if block_given?
-      yield(*result)
+      yield(result)
     else
       result
     end
