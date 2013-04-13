@@ -5,7 +5,9 @@ module RSpecSystemPuppet::Helpers
   include RSpecSystem::Log
 
   # Basic helper to install puppet
-  def puppet_install(options = {})
+  #
+  # @param opts [Hash] a hash of opts
+  def puppet_install(opts = {})
     # Grab facts from node
     facts = system_node.facts
 
@@ -43,17 +45,19 @@ module RSpecSystemPuppet::Helpers
   end
 
   # Helper to copy a module onto a node from source
-  def puppet_module_install(options)
+  #
+  # @param opts [Hash] a hash of opts
+  def puppet_module_install(opts)
     # Defaults etc.
-    options = {
+    opts = {
       :node => rspec_system_node_set.default_node,
       :module_path => "/etc/puppet/modules",
-    }.merge(options)
+    }.merge(opts)
 
-    source = options[:source]
-    module_name = options[:module_name]
-    module_path = options[:module_path]
-    node = options[:node]
+    source = opts[:source]
+    module_name = opts[:module_name]
+    module_path = opts[:module_path]
+    node = opts[:node]
 
     raise "Must provide :source and :module_name parameters" unless source && module_name
 
@@ -62,6 +66,8 @@ module RSpecSystemPuppet::Helpers
   end
 
   # Runs puppet resource commands
+  #
+  # @param opts [Hash] a hash of opts
   def puppet_resource(opts)
     if opts.is_a?(String)
       opts = {:resource => opts}
@@ -79,6 +85,64 @@ module RSpecSystemPuppet::Helpers
 
     log.info("Now running puppet resource")
     result = system_run(:n => node, :c => "puppet resource #{resource}")
+
+    if block_given?
+      yield(result)
+    else
+      result
+    end
+  end
+
+  # Run puppet DSL code directly with `puppet apply`.
+  #
+  # This takes a string of PuppetDSL code, uploads it to the test server and
+  # executes it directly with `puppet apply`.
+  #
+  # @param opts [Hash, String] a hash of opts, or a string containing the
+  #   code to execute with option defaults
+  # @option opts [String] :code the Puppet DSL code to execute
+  # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @return [Hash] a hash of results
+  # @yield [result] yields result when called as a block
+  # @yieldparam result [Hash] a hash containing :exit_code, :stdout and :stderr
+  # @example
+  #   it "run notice" do
+  #     puppet_apply("notice('foo')") do |r|
+  #       r[:stdout].should =~ /foo/
+  #     end
+  #   end
+  # @todo Support for custom switches perhaps?
+  # @todo The destination path is static, need a good remote random path
+  #   generator
+  def puppet_apply(opts)
+    if opts.is_a?(String)
+      opts = {:code => opts}
+    end
+
+    # Defaults
+    opts = {
+      :node => rspec_system_node_set.default_node
+    }.merge(opts)
+
+    code = opts[:code]
+    node = opts[:node]
+
+    raise 'Must provide code' unless code
+
+    log.info("Copying DSL to remote host")
+    file = Tempfile.new('rsp_puppet_apply')
+    file.write(code)
+    file.close
+
+    remote_path = '/tmp/puppetapply.' + rand(1000000000).to_s
+    r = system_rcp(:sp => file.path, :dp => remote_path, :d => node)
+    file.unlink
+
+    log.info("Cat file to see contents")
+    system_run(:n => node, :c => "cat #{remote_path}")
+
+    log.info("Now running puppet apply")
+    result = system_run(:n => node, :c => "puppet apply --detailed-exitcodes #{remote_path}")
 
     if block_given?
       yield(result)
