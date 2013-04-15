@@ -69,7 +69,7 @@ host { 'puppet':
       system_run(:n => node, :c => 'yum install -y puppet-server')
       system_run(:n => node, :c => 'service puppetmaster start')
     elsif facts['osfamily'] == 'Debian'
-      system_run(:n => node, :c => 'apt-get install -y puppet-server')
+      system_run(:n => node, :c => 'apt-get install -y puppetmaster')
       system_run(:n => node, :c => 'service puppetmaster start')
     end
   end
