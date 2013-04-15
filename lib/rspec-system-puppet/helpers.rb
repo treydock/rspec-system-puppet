@@ -42,6 +42,59 @@ module RSpecSystemPuppet::Helpers
     # Prep modules dir
     log.info("Preparing modules dir")
     system_run('mkdir -p /etc/puppet/modules')
+
+    pp = <<-EOS
+host { 'puppet':
+  ip => '127.0.0.1',
+}
+    EOS
+    puppet_apply(pp)
+  end
+
+  # Basic helper to install a puppet master
+  #
+  # @param opts [Hash] a hash of opts
+  def puppet_master_install
+    # Defaults etc.
+    opts = {
+      :node => rspec_system_node_set.default_node,
+    }
+
+    node = opts[:node]
+
+    # Grab facts from node
+    facts = system_node(:node => node).facts
+
+    if facts['osfamily'] == 'RedHat'
+      system_run(:n => node, :c => 'yum install -y puppet-server')
+      system_run(:n => node, :c => 'service puppetmaster start')
+    elsif facts['osfamily'] == 'Debian'
+      system_run(:n => node, :c => 'apt-get install -y puppet-server')
+      system_run(:n => node, :c => 'service puppetmaster start')
+    end
+  end
+
+  # Run puppet agent
+  #
+  # @param opts [Hash] a hash of opts
+  # @return [Hash] a hash of results
+  # @yield [result] yields result when called as a block
+  # @yieldparam result [Hash] a hash containing :exit_code, :stdout and :stderr
+  def puppet_agent
+    # Defaults etc.
+    opts = {
+      :node => rspec_system_node_set.default_node,
+    }
+
+    node = opts[:node]
+
+    result = system_run(:n => node, :c => 'puppet agent -t --detailed-exitcodes')
+
+    if block_given?
+      yield(result)
+    else
+      result
+    end
   end
 
   # Helper to copy a module onto a node from source
