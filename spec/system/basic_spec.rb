@@ -5,6 +5,15 @@ describe "basic tests:" do
     puppet_install()
   end
 
+  it 'check master install works' do
+    puppet_master_install()
+
+    puppet_agent do |r|
+      r[:stderr].should == ''
+      r[:exit_code].should == 0
+    end
+  end
+
   it 'facter domain should return something valid' do
     system_run("facter domain") do |r|
       r[:stdout].should =~ /[a-z]+/
