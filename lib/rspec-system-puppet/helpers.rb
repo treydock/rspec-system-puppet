@@ -81,18 +81,34 @@ host { 'puppet':
   # Run puppet agent
   #
   # @param opts [Hash] a hash of opts
+  # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @option opts [Boolean] :debug true if debugging required
+  # @option opts [Boolean] :trace true if trace required
   # @return [Hash] a hash of results
   # @yield [result] yields result when called as a block
   # @yieldparam result [Hash] a hash containing :exit_code, :stdout and :stderr
-  def puppet_agent
+  # @example
+  #   puppet_agent.do |r|
+  #     r[:exit_code].should == 0
+  #   end
+  # @example with debugging enabled
+  #   puppet_agent(:debug => true).do |r|
+  #     r[:exit_code].should == 0
+  #   end
+  def puppet_agent(opts = {})
     # Defaults etc.
     opts = {
       :node => rspec_system_node_set.default_node,
-    }
+      :debug => false,
+      :trace => true,
+    }.merge(opts)
 
     node = opts[:node]
 
-    result = system_run(:n => node, :c => 'puppet agent -t --detailed-exitcodes')
+    cmd = "puppet agent -t --detailed-exitcodes"
+    cmd += " --debug" if opts[:debug]
+    cmd += " --trace" if opts[:trace]
+    result = system_run(:n => node, :c => cmd)
 
     if block_given?
       yield(result)
@@ -159,6 +175,8 @@ host { 'puppet':
   #   code to execute with option defaults
   # @option opts [String] :code the Puppet DSL code to execute
   # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @option opts [Boolean] :debug true if debugging required
+  # @option opts [Boolean] :trace true if trace required
   # @return [Hash] a hash of results
   # @yield [result] yields result when called as a block
   # @yieldparam result [Hash] a hash containing :exit_code, :stdout and :stderr
@@ -168,9 +186,6 @@ host { 'puppet':
   #       r[:stdout].should =~ /foo/
   #     end
   #   end
-  # @todo Support for custom switches perhaps?
-  # @todo The destination path is static, need a good remote random path
-  #   generator
   def puppet_apply(opts)
     if opts.is_a?(String)
       opts = {:code => opts}
@@ -178,7 +193,9 @@ host { 'puppet':
 
     # Defaults
     opts = {
-      :node => rspec_system_node_set.default_node
+      :node => rspec_system_node_set.default_node,
+      :debug => false,
+      :trace => true,
     }.merge(opts)
 
     code = opts[:code]
@@ -199,7 +216,11 @@ host { 'puppet':
     system_run(:n => node, :c => "cat #{remote_path}")
 
     log.info("Now running puppet apply")
-    result = system_run(:n => node, :c => "puppet apply --detailed-exitcodes #{remote_path}")
+    cmd = "puppet apply --detailed-exitcodes"
+    cmd += " --debug" if opts[:debug]
+    cmd += " --trace" if opts[:trace]
+    cmd += " #{remote_path}"
+    result = system_run(:n => node, :c => cmd)
 
     if block_given?
       yield(result)
