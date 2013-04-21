@@ -1,11 +1,13 @@
 # rspec-system-puppet
 
-While unit testing using [rspec-puppet](https://rubygems.org/gems/rspec-puppet) can test catalog compilation, templating and match input with desired catalog output it doesn't really test the actual outcome on a real machine. This is where this library comes into play.
-
 `rspec-system-puppet` is a Puppet plugin for [rspec-system](https://rubygems.org/gems/rspec-system). The goal here is to provide a series of helpers for performing proper system tests on Puppet related modules such as:
 
 * Pure Puppet DSL content, classes and defined resources
 * Ruby based plugins: facts, functions, faces, types and providers
+
+## Relation to rspec-puppet
+
+While unit testing using [rspec-puppet](https://rubygems.org/gems/rspec-puppet) is extremely useful for testing your content based on comparing input of parameters, facts etc. with the desired catalog output, it doesn't however do a real test. This library is meant to augment the rspec-puppet test suite, and is designed specifically to work with it. In fact I suggest running both these tests in parallel with rspec-puppet, as rspec-puppet is always going to execute basic tests faster - especially tests that don't need a real run like comparing template output with desired output, or fine-detailed items like expected property values and logical blocks.
 
 ## Quick Start
 
@@ -155,6 +157,6 @@ Now you should be able to do:
 * [API Documentation](http://rubydoc.info/gems/rspec-system-puppet/) - this provides the Ruby API docs for the Puppet Helpers. In particular look at the [Helpers](http://rubydoc.info/gems/rspec-system-puppet/RSpecSystemPuppet/Helpers) sub-class.
 * [rspec-system docs](http://rubydoc.info/gems/rspec-system) - This is the main library rspec-system-puppet utilises, and should provide more in-depth instructions on doing more complex stuff than what this gem alone provides.
 
-## Jenkins Integration
+## CI Integration
 
 For now consult the documentation for [rspec-system](http://rubygems.org/gems/rspec-system) for more details.
