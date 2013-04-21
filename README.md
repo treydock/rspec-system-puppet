@@ -151,6 +151,12 @@ Then grab the gemset bundle:
 Now you should be able to do:
 
     # rake spec:system
+    
+If you want to test an alternate set, just use the RSPEC_SET environment variable like so:
+
+    # RSPEC_SET=debian-70rc1-x64 rake spec:system
+    
+Consult the .nodeset.yml file for the list of sets.
 
 ## Further Information
 
