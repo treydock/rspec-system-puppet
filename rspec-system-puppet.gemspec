@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   # Metadata
   s.name        = "rspec-system-puppet"
-  s.version     = "0.3.4"
+  s.version     = "1.0.0"
   s.authors     = ["Ken Barber"]
   s.email       = ["ken@bob.sh"]
   s.homepage    = "https://github.com/kbarber/rspec-system-puppet"
@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
 
   # Dependencies
   s.required_ruby_version = '>= 1.8.7'
-  s.add_runtime_dependency "rspec-system", '~> 0.3.0'
+  s.add_runtime_dependency "rspec-system", '~> 1.0.0'
 end
