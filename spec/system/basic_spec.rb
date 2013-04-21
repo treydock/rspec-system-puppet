@@ -23,17 +23,16 @@ describe "basic tests:" do
   end
 
   it 'facter domain should return something valid' do
-    system_run("facter domain") do |r|
-      r[:stdout].should =~ /[a-z]+/
-      r[:stderr].should == ''
+    facter do |r|
+      r[:facts]['domain'].should =~ /[a-z]+/
       r[:exit_code].should == 0
     end
   end
 
   it 'facter fqdn should return something valid' do
-    system_run("facter fqdn") do |r|
-      r[:stdout].should =~ /vm/
+    facter do |r|
       r[:stderr].should == ''
+      r[:facts]['fqdn'] =~ /vm/
       r[:exit_code].should == 0
     end
   end
