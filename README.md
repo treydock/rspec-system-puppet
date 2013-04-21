@@ -58,8 +58,8 @@ Make sure you have a `Gemfile` like the one below, this includes `rspec-puppet` 
     group :development, :test do
       gem 'rake'
       gem 'puppetlabs_spec_helper', :require => false
-      gem 'rspec-system-puppet', '~>0.3.1'
-      gem 'puppet-lint', '~> 0.3.2'
+      gem 'rspec-system-puppet'
+      gem 'puppet-lint'
     end
 
     if puppetversion = ENV['PUPPET_GEM_VERSION']
