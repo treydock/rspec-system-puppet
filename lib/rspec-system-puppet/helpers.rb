@@ -228,4 +228,38 @@ host { 'puppet':
       result
     end
   end
+
+  # Run facter on a remote machine
+  #
+  # @param opts [Hash] a hash of opts
+  # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @return [Hash] a hash of results
+  # @yield [result] yields result when called as a block
+  # @yieldparam result [Hash] a hash containing :facts, :exit_code, :stdout and
+  #   :stderr
+  def facter(opts = {})
+    # Defaults
+    opts = {
+      :node => rspec_system_node_set.default_node,
+    }.merge(opts)
+
+    node = opts[:node]
+
+    raise "Must specify a node" unless node
+
+    cmd = "facter -y"
+    result = system_run(:n => node, :c => cmd)
+
+    begin
+      facts = YAML::load(result[:stdout])
+      result[:facts] = facts
+    rescue
+    end
+
+    if block_given?
+      yield(result)
+    else
+      result
+    end
+  end
 end
