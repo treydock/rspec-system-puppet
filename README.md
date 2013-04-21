@@ -156,6 +156,7 @@ Now you should be able to do:
 
 * [API Documentation](http://rubydoc.info/gems/rspec-system-puppet/) - this provides the Ruby API docs for the Puppet Helpers. In particular look at the [Helpers](http://rubydoc.info/gems/rspec-system-puppet/RSpecSystemPuppet/Helpers) sub-class.
 * [rspec-system docs](http://rubydoc.info/gems/rspec-system) - This is the main library rspec-system-puppet utilises, and should provide more in-depth instructions on doing more complex stuff than what this gem alone provides.
+* [puppetlabs-firewall](http://github.com/puppetlabs/puppetlabs-firewall) - If you want to see the library in action this module is the primary guinea pig for rspec-system-puppet and should give you some ideas on writing tests of your own. Look under `spec/system` for the tests.
 
 ## CI Integration
 
