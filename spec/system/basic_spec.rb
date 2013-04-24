@@ -71,7 +71,7 @@ describe "basic tests:" do
 
   it 'check for no errors when including a class' do
     puppet_module_install(
-      :source => 'spec/fixtures/mymodule',
+      :source => proj_root + 'spec' + 'fixtures' + 'mymodule',
       :module_name => 'mymodule'
     )
     pp = <<-EOS.gsub(/^\s{6}/, '')
