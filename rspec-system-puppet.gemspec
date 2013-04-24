@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = "1.0.1"
   s.authors     = ["Ken Barber"]
   s.email       = ["ken@bob.sh"]
-  s.homepage    = "https://github.com/kbarber/rspec-system-puppet"
+  s.homepage    = "https://github.com/puppetlabs/rspec-system-puppet"
   s.summary     = "Puppet rspec-system plugin"
 
   # Manifest
