@@ -137,6 +137,7 @@ host { 'puppet':
   def puppet_module_install(opts)
     # Defaults etc.
     opts = {
+      :source => 'forge',
       :node => rspec_system_node_set.default_node,
       :module_path => "/etc/puppet/modules",
     }.merge(opts)
@@ -148,8 +149,13 @@ host { 'puppet':
 
     raise "Must provide :source and :module_name parameters" unless source && module_name
 
-    log.info("Now transferring module onto node")
-    system_rcp(:sp => source, :d => node, :dp => File.join(module_path, module_name))
+    if source =~ /forge/
+      log.info("Now installing module onto node")
+      system_run(:n => node, :c => "puppet module install #{module_name} --modulepath #{module_path}")
+    else
+      log.info("Now transferring module onto node")
+      system_rcp(:sp => source, :d => node, :dp => File.join(module_path, module_name))
+    end
   end
 
   # Runs puppet resource commands
