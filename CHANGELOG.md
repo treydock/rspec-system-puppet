@@ -1,3 +1,14 @@
+2.1.0
+=====
+
+This feature release provides some minor bug fixes, improved docuemntation and features as outlined below.
+
+#### Detailed Changes
+
+* Remove coupling with Bundler (Hunter Haugen)
+* Add module_path option to puppet_apply helper (Dominic Cleal)
+* Pass node option when creating the host alias for puppet (Trey Dockendorf)
+
 2.0.0
 =====
 
