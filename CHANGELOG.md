@@ -1,3 +1,12 @@
+2.2.0
+=====
+
+This feature release provides the ability to pass a :puppet setting to the facter helper, allowing you to return puppet facts when querying. At the moment the setting is false by default.
+
+#### Detailed Changes
+
+* Add puppet option to facter helper (Trey Dockendorf)
+
 2.1.0
 =====
 
