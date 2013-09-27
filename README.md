@@ -112,8 +112,6 @@ You will need a spec helper for your tests to `require`. So create the file `spe
       # Enable colour
       c.tty = true
 
-      c.include RSpecSystemPuppet::Helpers
-
       # This is where we 'setup' the nodes before running our tests
       c.before :suite do
         # Install puppet
