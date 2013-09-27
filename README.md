@@ -24,34 +24,14 @@ In your existing Puppet module project, create a `.nodeset.yml` with the followi
     ---
     default_set: 'centos-64-x64'
     sets:
-      'centos-59-x64':
-        nodes:
-          "main.foo.vm":
-            prefab: 'centos-59-x64'
       'centos-64-x64':
         nodes:
-          "main.foo.vm":
+          'main.foo.vm':
             prefab: 'centos-64-x64'
-      'fedora-18-x64':
-        nodes:
-          "main.foo.vm":
-            prefab: 'fedora-18-x64'
-      'debian-607-x64':
-        nodes:
-          "main.foo.vm":
-            prefab: 'debian-607-x64'
       'debian-70rc1-x64':
         nodes:
-          "main.foo.vm":
+          'main.foo.vm':
             prefab: 'debian-70rc1-x64'
-      'ubuntu-server-10044-x64':
-        nodes:
-          "main.foo.vm":
-            prefab: 'ubuntu-server-10044-x64'
-      'ubuntu-server-12042-x64':
-        nodes:
-          "main.foo.vm":
-            prefab: 'ubuntu-server-12042-x64'
 
 ### Install the gem
 
@@ -61,22 +41,13 @@ You may install `rspec-system-puppet` manually with:
 
     # gem install rspec-system-puppet
 
-However it is usually recommended to include `gem 'rspec-system-puppet'` in your `Gemfile` and let bundler install it. An example `Gemfile` is shown below. This includes `rspec-puppet` test content as well:
+However it is usually recommended to include `gem 'rspec-system-puppet'` in your `Gemfile` and let bundler install it. A bare-minimum example `Gemfile` is shown below:
 
     source 'https://rubygems.org'
 
     group :development, :test do
       gem 'rake'
-      gem 'rspec-puppet'
-      gem 'puppetlabs_spec_helper', :require => false
       gem 'rspec-system-puppet'
-      gem 'puppet-lint'
-    end
-
-    if puppetversion = ENV['PUPPET_GEM_VERSION']
-      gem 'puppet', puppetversion, :require => false
-    else
-      gem 'puppet', :require => false
     end
 
 Install using Bundler with:
@@ -89,12 +60,7 @@ If you're using git, add `.rspec_system` to your project's `.gitignore` file.  T
 
 Create a `Rakefile` like so:
 
-    require 'puppetlabs_spec_helper/rake_tasks'
     require 'rspec-system/rake_task'
-
-    task :default do
-      sh %{rake -T}
-    end
 
 ### Create spec helper
 
@@ -169,7 +135,7 @@ If you want to test an alternate set, just use the `RSPEC_SET` environment varia
 
     # RSPEC_SET=debian-70rc1-x64 bundle exec rake spec:system
 
-Consult the `.nodeset.yml` file for the list of sets.
+Consult the `.nodeset.yml` file for the list of sets, and [the rspec-system nodesets introduction](https://github.com/puppetlabs/rspec-system#creating-a-nodeset-file) to learn how to manage them.
 
 ## Further Information
 
