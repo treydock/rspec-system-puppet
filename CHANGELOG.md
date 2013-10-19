@@ -1,3 +1,12 @@
+2.2.1
+=====
+
+This is a minor feature release that increments the version of the Puppet repo release RPM.
+
+#### Detailed Changes
+
+* Update puppetlabs-release RPM version (Stefano Zanella)
+
 2.2.0
 =====
 
