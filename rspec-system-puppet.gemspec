@@ -17,5 +17,15 @@ Gem::Specification.new do |s|
 
   # Dependencies
   s.required_ruby_version = '>= 1.8.7'
-  s.add_runtime_dependency "rspec-system", '~> 2.0'
+
+  # Here we conditionally don't include rspec-system if the version has be
+  # overridden by this environment variable. This only applies in CI and will
+  # not affect the deployment process. The idea is that we avoid defining here
+  # and move the definition to Gemfile when there is a custom revision so we
+  # can do interesting things like git and file based overrides (like testing
+  # against master in CI).
+  rsversion = ENV['GEM_RS_VERSION']
+  unless rsversion
+    s.add_runtime_dependency "rspec-system", '~> 2.0'
+  end
 end
