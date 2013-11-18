@@ -31,10 +31,11 @@ module RSpecSystem::Helpers
           shell :c => "mkdir -p \"#{File.join(module_path, module_name)}\"", :d => node
           result = rcp :sp => "#{source}/#{file}", :d => node, :dp => File.join(module_path, module_name, file)
           unless result[:success]
-            break
+            return result
           end
         end
       end
+      {:success => true}
     end
   end
 end
