@@ -58,6 +58,7 @@ module RSpecSystemPuppet::Helpers
   #
   # @param opts [Hash] a hash of opts
   # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @option opts [Array] :skip list of files to be skipped. By default this is [".rspec_system"]
   # @return [RSpecSystem::Helpers::PuppetModuleInstall] results
   # @yield [result] yields result when called as a block
   # @yieldparam result [RSpecSystem::Helpers::PuppetModuleInstall] results
