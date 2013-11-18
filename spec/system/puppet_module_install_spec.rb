@@ -13,4 +13,13 @@ describe "helper puppet_module_install" do
       r.exit_code.should be_zero
     end
   end
+
+  it 'shoud not copy skipped files' do
+    module_path = proj_root + 'spec' + 'fixtures' + 'skip_module'
+    puppet_module_install(:source => module_path, :module_name => 'skip_module', :skip => ['skip_me.txt'])
+    shell 'ls /etc/puppet/modules/skip_module/skip_me.txt' do |r|
+      r.exit_code.should equal(2)
+      r.stderr.should =~ /.*No such file or directory.*/
+    end
+  end
 end
