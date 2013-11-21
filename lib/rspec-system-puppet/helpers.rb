@@ -90,6 +90,7 @@ module RSpecSystemPuppet::Helpers
   #   code to execute with option defaults
   # @option opts [String] :code the Puppet DSL code to execute
   # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @option opts [String] :user user to execute Puppet as, defaults to root
   # @option opts [Boolean] :debug true if debugging required
   # @option opts [Boolean] :trace true if trace required
   # @option opts [String] :module_path puppet modulepath to use
