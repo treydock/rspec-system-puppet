@@ -24,6 +24,7 @@ module RSpecSystem::Helpers
     def execute
       code = opts[:code]
       node = opts[:node]
+      user = opts[:user]
 
       log.info("Copying DSL to remote host")
       file = Tempfile.new('rcp_puppet_apply')
@@ -43,6 +44,7 @@ module RSpecSystem::Helpers
       cmd += " --trace" if opts[:trace]
       cmd += " --modulepath #{opts[:module_path]}" if opts[:module_path]
       cmd += " #{remote_path}"
+      cmd = "chown #{user} #{remote_path} && su - #{user} -c '#{cmd}'" if user
 
       shell(:c => cmd, :n => node).to_hash
     end
