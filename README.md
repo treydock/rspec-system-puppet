@@ -67,9 +67,7 @@ Create a `Rakefile` like so:
 You will need a spec helper for your tests to `require`. So create the file `spec/spec_helper_system.rb`:
 
     require 'rspec-system/spec_helper'
-    require 'rspec-system-puppet/helpers'
-
-    include RSpecSystemPuppet::Helpers
+    require 'rspec-system-puppet/spec_helper'
 
     RSpec.configure do |c|
       # Project root
@@ -134,6 +132,14 @@ If you want to test an alternate set, just use the `RSPEC_SET` environment varia
     # RSPEC_SET=debian-70rc1-x64 bundle exec rake spec:system
 
 Consult the `.nodeset.yml` file for the list of sets, and [the rspec-system nodesets introduction](https://github.com/puppetlabs/rspec-system#creating-a-nodeset-file) to learn how to manage them.
+
+### Runtime options
+
+The following options can defined using environment variables:
+
+* *RS_PUPPET_REPO_BASE* - the URL base component of the puppetlabs-release package.
+  * RedHat systems the default is `http://yum.puppetlabs.com`
+  * Debian systems the default is `http://apt.puppetlabs.com`
 
 ## Further Information
 

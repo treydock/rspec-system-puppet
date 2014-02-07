@@ -121,4 +121,20 @@ module RSpecSystemPuppet::Helpers
   def facter(opts = {}, &block)
     RSpecSystemPuppet::Helpers::Facter.new(opts, self, &block)
   end
+
+  # Returns the default host name URL component for Puppetlabs repos
+  # based on the osfamily value
+  #
+  # @param osfamily [String] the node's osfamily fact value
+  # @return [String]
+  def osfamily_repo_base(osfamily)
+    case osfamily
+    when 'RedHat'
+      'http://yum.puppetlabs.com'
+    when 'Debian'
+      'http://apt.puppetlabs.com'
+    else
+      nil
+    end
+  end
 end

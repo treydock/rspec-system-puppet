@@ -10,6 +10,9 @@ module RSpecSystem::Helpers
       # Grab facts from node
       facts = node.facts
 
+      # Grab repo base from RSpec configuration
+      puppet_repo_base = RSpec.configuration.rs_puppet_repo_base
+
       # Remove annoying mesg n from profile, otherwise on Debian we get:
       # stdin: is not a tty which messes with our tests later on.
       if facts['osfamily'] == 'Debian'
@@ -25,14 +28,14 @@ module RSpecSystem::Helpers
           shell :c => 'sed -i "0,/RE/s/enabled=0/enabled=1/" /etc/yum.repos.d/fedora-updates-testing.repo', :n => node
         else
           if facts['operatingsystemrelease'] =~ /^6\./
-            shell :c => 'rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-7.noarch.rpm', :n => node
+            shell :c => "rpm -ivh #{puppet_repo_base}/el/6/products/x86_64/puppetlabs-release-6-7.noarch.rpm", :n => node
           else
-            shell :c => 'rpm -ivh http://yum.puppetlabs.com/el/5/products/x86_64/puppetlabs-release-5-7.noarch.rpm', :n => node
+            shell :c => "rpm -ivh #{puppet_repo_base}/el/5/products/x86_64/puppetlabs-release-5-7.noarch.rpm", :n => node
           end
         end
         shell :c => 'yum install -y puppet', :n => node
       elsif facts['osfamily'] == 'Debian'
-        shell :c => "wget http://apt.puppetlabs.com/puppetlabs-release-#{facts['lsbdistcodename']}.deb", :n => node
+        shell :c => "wget #{puppet_repo_base}/puppetlabs-release-#{facts['lsbdistcodename']}.deb", :n => node
         shell :c => "dpkg -i puppetlabs-release-#{facts['lsbdistcodename']}.deb", :n => node
         shell :c => 'apt-get update', :n => node
         shell :c => 'apt-get install -y puppet', :n => node
